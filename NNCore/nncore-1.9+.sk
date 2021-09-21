@@ -46,12 +46,12 @@ options:
     
     # If the above option is true...
     # What do you want the leave message to be?
-    # Default = &e%player% left the game.
-    quitMessage: &e%player% left the game.
+    # Default = &e%player%&e left the game.
+    quitMessage: &e%player%&e left the game.
     
     # What do you want the leave message to be?
-    # Default = &c%victim% was killed by %attacker%.
-    deathMessage: &c%victim% was killed by %attacker%.
+    # Default = &c%victim%&c was killed by %attacker%&c.
+    deathMessage: &c%victim%&c was killed by %attacker%&c.
     
     # What do you want the prefix to be for broadcasting messages?
     # Default = &f&lNN&c&lAlert &8| &7
@@ -127,7 +127,7 @@ options:
     updateNotify: true
     
     # You DO NOT need to edit this section! If you do things could break!
-    nncoreVersion: 1.4
+    nncoreVersion: 1.4.1
 
 # WARNING!
 #
@@ -159,9 +159,9 @@ on script load:
                 set {_diff} to ({_n} - {@nncoreVersion}) * 10
                 wait 5 ticks
                 send "&7" to loop-player
-                send "&8| &7There's a later version of NNCore available! (v%{_actual}%)" to loop-player
+                send "&8| &7There's a later version of NNCore available! (v%{_actual}%&7)" to loop-player
                 send "&8| &7Download it here:&a <link:https://bit.ly/latestnncore>https://bit.ly/latestnncore" to loop-player
-                send "&8| &7You are currently %{_diff}% version(s) behind! (v{@nncoreVersion})" to loop-player
+                send "&8| &7You are currently %{_diff}%&7 version(s) behind! (v{@nncoreVersion}&7)" to loop-player
                 send "&7" to loop-player
 
 on join:
@@ -170,7 +170,7 @@ on join:
         if player has permission "nncore.notify":
             send "&cYour skript version is out of date!"
             send "&cPlease update to version 2.2 or later!"
-            send "&cFor 1.8 servers, use 2.2-dev36"
+            send "&cFor 1.8 servers, use 2.2-dev37c"
 
     {nncore.status} is true
     
@@ -195,9 +195,9 @@ on join:
                 set {_diff} to ({_n} - {@nncoreVersion}) * 10
                 wait 5.1 seconds
                 message ""
-                message "&8| &7There's a later version of NNCore available! (v%{_actual}%)"
+                message "&8| &7There's a later version of NNCore available! (v%{_actual}%&7)"
                 message "&8| &7Download it here:&a https://bit.ly/latestnncore"
-                message "&8| &7You are currently %{_diff}% version(s) behind! (v{@nncoreVersion})"
+                message "&8| &7You are currently %{_diff}%&7 version(s) behind! (v{@nncoreVersion}&7)"
                 message ""
 
 on quit:
@@ -229,22 +229,22 @@ command /fly [<boolean>] [<player>]:
         if arg 1 is set:
             if arg 2 is set:
                 if arg 1 is true:
-                    send "{@positivePrefix} {@commandReplyColour}Enabled %arg 2%'s flight mode!"
+                    send "{@positivePrefix} {@commandReplyColour}Enabled %arg 2%{@commandReplyColour}'s flight mode!"
                     set player's flight mode to true
                 else:
-                    send "{@negativePrefix} {@commandReplyColour}Disabled %arg 2%'s flight mode!"
+                    send "{@negativePrefix} {@commandReplyColour}Disabled %arg 2%{@commandReplyColour}'s flight mode!"
                     set player's flight mode to false
             else if arg 1 is true:
-                send "{@positivePrefix} {@commandReplyColour}Enabled %player%'s flight mode!"
+                send "{@positivePrefix} {@commandReplyColour}Enabled %player%{@commandReplyColour}'s flight mode!"
                 set player's flight mode to true
             else:
-                send "{@negativePrefix} {@commandReplyColour}Disabled %player%'s flight mode!"
+                send "{@negativePrefix} {@commandReplyColour}Disabled %player%{@commandReplyColour}'s flight mode!"
                 set player's flight mode to false
         else if flight state of player is true:
-            send "{@negativePrefix} {@commandReplyColour}Disabled %player%'s flight mode!"
+            send "{@negativePrefix} {@commandReplyColour}Disabled %player%{@commandReplyColour}'s flight mode!"
             set player's flight mode to false
         else:
-            send "{@positivePrefix} {@commandReplyColour}Enabled %player%'s flight mode!"
+            send "{@positivePrefix} {@commandReplyColour}Enabled %player%{@commandReplyColour}'s flight mode!"
             set player's flight mode to true
 
 command /nightvision [<boolean>] [<player>]:
@@ -316,12 +316,12 @@ command /feed [<player>]:
             stop
         if arg 1 is set:
             if player has permission "{@feedOthersPermission}":
-                send "{@positivePrefix} {@commandReplyColour}Sated %arg 1%'s appetite."
+                send "{@positivePrefix} {@commandReplyColour}Sated %arg 1%{@commandReplyColour}'s appetite."
                 feed arg 1
             else:
                 send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
         else:
-            send "{@positivePrefix} {@commandReplyColour}Sated %player%'s appetite."
+            send "{@positivePrefix} {@commandReplyColour}Sated %player%{@commandReplyColour}'s appetite."
             feed player
 
 command /heal [<player>]:
@@ -334,12 +334,12 @@ command /heal [<player>]:
             stop
         if arg 1 is set:
             if player has permission "{@healOthersPermission}":
-                send "{@positivePrefix} {@commandReplyColour}Healed %arg 1%."
+                send "{@positivePrefix} {@commandReplyColour}Healed %arg 1%{@commandReplyColour}."
                 heal arg 1
             else:
                 send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
         else:
-            send "{@positivePrefix} {@commandReplyColour}Healed %player%."
+            send "{@positivePrefix} {@commandReplyColour}Healed %player%{@commandReplyColour}."
             heal player
 
 command /gamemode [<text>] [<player>]:
@@ -361,17 +361,17 @@ command /gamemode [<text>] [<player>]:
                 set {_gm} to spectator
             if arg 2 is set:
                 if player has permission "{@gamemodeOthersPermission}":
-                    send "{@positivePrefix} {@commandReplyColour}Set %arg 2%'s gamemode to %{_gm}%."
+                    send "{@positivePrefix} {@commandReplyColour}Set %arg 2%{@commandReplyColour}'s gamemode to %{_gm}%{@commandReplyColour}."
                     set arg 2's gamemode to {_gm}
                 else:
                     send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
             else:
-                send "{@positivePrefix} {@commandReplyColour}Set %player%'s gamemode to %{_gm}%."
+                send "{@positivePrefix} {@commandReplyColour}Set %player%{@commandReplyColour}'s gamemode to %{_gm}%{@commandReplyColour}."
                 set player's gamemode to {_gm}
         else:
             send "{@negativePrefix} {@commandReplyColour}Please specify a gamemode!"
 
-command /gmc [<player>]:
+command /gmc [<player=%player%>]:
     permission: {@gamemodePermission}
     permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
     trigger:
@@ -379,17 +379,17 @@ command /gmc [<player>]:
             send "&cThis command is disabled! Please download a later version of Skript!"
             send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
             stop
-        if arg 1 is set:
+        if arg 1 != player:
             if player has permission "{@gamemodeOthersPermission}":
-                send "{@positivePrefix} {@commandReplyColour}Set %arg 1%'s gamemode to creative."
+                send "{@positivePrefix} {@commandReplyColour}Set %arg 1%{@commandReplyColour}'s gamemode to creative."
                 set arg 1's gamemode to creative
             else:
                 send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
         else:
-            send "{@positivePrefix} {@commandReplyColour}Set %player%'s gamemode to creative."
+            send "{@positivePrefix} {@commandReplyColour}Set %player%{@commandReplyColour}'s gamemode to creative."
             set player's gamemode to creative
 
-command /gms [<player>]:
+command /gms [<player=%player%>]:
     permission: {@gamemodePermission}
     permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
     trigger:
@@ -397,17 +397,17 @@ command /gms [<player>]:
             send "&cThis command is disabled! Please download a later version of Skript!"
             send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
             stop
-        if arg 1 is set:
+        if arg 1 != player:
             if player has permission "{@gamemodeOthersPermission}":
-                send "{@positivePrefix} {@commandReplyColour}Set %arg 1%'s gamemode to survival."
+                send "{@positivePrefix} {@commandReplyColour}Set %arg 1%{@commandReplyColour}'s gamemode to survival."
                 set arg 1's gamemode to survival
             else:
                 send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
         else:
-            send "{@positivePrefix} {@commandReplyColour}Set %player%'s gamemode to survival."
+            send "{@positivePrefix} {@commandReplyColour}Set %player%{@commandReplyColour}'s gamemode to survival."
             set player's gamemode to survival
 
-command /gmsp [<player>]:
+command /gmsp [<player=%player%>]:
     permission: {@gamemodePermission}
     permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
     trigger:
@@ -417,15 +417,15 @@ command /gmsp [<player>]:
             stop
         if arg 1 is set:
             if player has permission "{@gamemodeOthersPermission}":
-                send "{@positivePrefix} {@commandReplyColour}Set %arg 1%'s gamemode to spectator."
+                send "{@positivePrefix} {@commandReplyColour}Set %arg 1%{@commandReplyColour}'s gamemode to spectator."
                 set arg 1's gamemode to spectator
             else:
                 send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
         else:
-            send "{@positivePrefix} {@commandReplyColour}Set %player%'s gamemode to spectator."
+            send "{@positivePrefix} {@commandReplyColour}Set %player%{@commandReplyColour}'s gamemode to spectator."
             set player's gamemode to spectator
 
-command /gma [<player>]:
+command /gma [<player=%player%>]:
     permission: {@gamemodePermission}
     permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
     trigger:
@@ -433,14 +433,14 @@ command /gma [<player>]:
             send "&cThis command is disabled! Please download a later version of Skript!"
             send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
             stop
-        if arg 1 is set:
+        if arg 1 != player:
             if player has permission "{@gamemodeOthersPermission}":
-                send "{@positivePrefix} {@commandReplyColour}Set %arg 1%'s gamemode to adventure."
+                send "{@positivePrefix} {@commandReplyColour}Set %arg 1%{@commandReplyColour}'s gamemode to adventure."
                 set arg 1's gamemode to adventure
             else:
                 send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
         else:
-            send "{@positivePrefix} {@commandReplyColour}Set %player%'s gamemode to adventure."
+            send "{@positivePrefix} {@commandReplyColour}Set %player%{@commandReplyColour}'s gamemode to adventure."
             set player's gamemode to adventure
 
 command /break:
@@ -495,12 +495,12 @@ command /fix [<player>]:
             stop
         if arg 1 is set:
             if player has permission "{@fixOthersPermission}":
-                send "{@positivePrefix} {@commandReplyColour}Repaired %arg 1%'s tool."
+                send "{@positivePrefix} {@commandReplyColour}Repaired %arg 1%{@commandReplyColour}'s tool."
                 repair arg 1's tool
             else:
                 send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
         else:
-            send "{@positivePrefix} {@commandReplyColour}Repaired %player%'s tool."
+            send "{@positivePrefix} {@commandReplyColour}Repaired %player%{@commandReplyColour}'s tool."
             repair player's tool
 
 command /fixall [<player>]:
@@ -515,13 +515,13 @@ command /fixall [<player>]:
             if player has permission "{@fixAllOthersPermission}":
                 loop items in arg 1's inventory:
                     repair loop-item
-                send "{@positivePrefix} {@commandReplyColour}Repaired all items in %arg 1%'s inventory."
+                send "{@positivePrefix} {@commandReplyColour}Repaired all items in %arg 1%{@commandReplyColour}'s inventory."
             else:
                 send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
         else:
             loop items in player's inventory:
                 repair loop-item
-            send "{@positivePrefix} {@commandReplyColour}Repaired all items in %arg 1%'s inventory."
+            send "{@positivePrefix} {@commandReplyColour}Repaired all items in %arg 1%{@commandReplyColour}'s inventory."
 
 command /give [<player>] [<item>] [<integer>]:
     permission: {@givePermission}
@@ -538,7 +538,7 @@ command /give [<player>] [<item>] [<integer>]:
                 else:
                     set {_am} to 64
                 add {_am} of arg 2 to arg 1's inventory
-                send "{@positivePrefix} {@commandReplyColour}Given %arg 1% %{_am}% of %arg 2%"
+                send "{@positivePrefix} {@commandReplyColour}Given %arg 1%{@commandReplyColour} %{_am}%{@commandReplyColour} of %arg 2%"
             else:
                 send "{@negativePrefix} {@commandReplyColour}Please specify an item to give."
         else:
@@ -558,7 +558,7 @@ command /item [<item>] [<integer>]:
             else:
                 set {_am} to 64
             add {_am} of arg 1 to player's inventory
-            send "{@positivePrefix} {@commandReplyColour}Spawned %{_am}% of %arg 2%"
+            send "{@positivePrefix} {@commandReplyColour}Spawned %{_am}%{@commandReplyColour} of %arg 2%"
         else:
             send "{@negativePrefix} {@commandReplyColour}Please specify an item to give."
 
