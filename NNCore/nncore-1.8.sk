@@ -1,0 +1,614 @@
+# NNCore - Made By Obey#0001
+# BE CAREFUL EDITING ANYTHING BELOW THE WARNING!
+#
+# Version is for 1.8 (we advise Skript 2.2-dev37c)
+
+options:
+    
+    # -------------------> MESSAGES SECTION <-------------------
+    
+    # What do you want to positive prefix before command replies to be?
+    # Default = &b&lNN&f&lCore &8|
+    positivePrefix: &b&lNN&f&lCore &8|
+    
+    # What do you want to negative prefix before command replies to be?
+    # Default = &b&lNN&f&lCore &8|
+    negativePrefix: &b&lNN&f&lCore &8|
+    
+    # What do you want the permission denied prefix to be?
+    # Default = §b§lNN§f§lCore §8|
+    noPermPrefix: &b&lNN&f&lCore &8|
+    
+    # What colour do you want the no permission message reply to be?
+    # Default = §7
+    noPermColour: §7
+    
+    # What colour do you want the command replies message to be?
+    # Default = &7
+    commandReplyColour: &7
+    
+    # What do you want players to get sent when they dont have permissions?
+    # Default = You do not have permission to use this command!
+    noPermMessage: You do not have permission to use this command!
+    
+    # Should join messages be enabled?
+    # Default = true
+    joinMessageEnabled: true
+    
+    # If the above option is true...
+    # What do you want the join message to be?
+    # Default = &e%player% joined the game.
+    joinMessage: &e%player% joined the game.
+    
+    # Should leave messages be enabled?
+    # Default = true
+    quitMessageEnabled: true
+    
+    # If the above option is true...
+    # What do you want the leave message to be?
+    # Default = &e%player% left the game.
+    quitMessage: &e%player% left the game.
+    
+    # What do you want the leave message to be?
+    # Default = &c%victim% was killed by %attacker%.
+    deathMessage: &c%victim% was killed by %attacker%.
+    
+    # What do you want the prefix to be for broadcasting messages?
+    # Default = &f&lNN&c&lAlert &8| &7
+    broadcastPrefix: &f&lNN&c&lAlert &8| &7
+    
+    # -------------------> PERMISSION SECTION <-------------------
+    
+    # What permission is needed for the /fly command?
+    flyPermission: nncore.fly
+    
+    # What permission is needed for the /fly command on other players?
+    flyOthersPermission: nncore.fly.other
+    
+    # What permission is needed for the /nv command?
+    nvPermission: nncore.nightvision
+    
+    # What permission is needed for the /nv command on other players?
+    nvOthersPermission: nncore.nightvision.other
+    
+    # What permission is needed for the /broadcast command?
+    broadcastPermission: nncore.broadcast
+    
+    # What permission is needed for the /feed command?
+    feedPermission: nncore.feed
+    
+    # What permission is needed for the /feed command on other players?
+    feedOthersPermission: nncore.feed.other
+    
+    # What permission is needed for the /heal command?
+    healPermission: nncore.heal
+    
+    # What permission is needed for the /heal command on other players?
+    healOthersPermission: nncore.heal.other
+    
+    # What permission is needed for the /gamemode command?
+    # This also is for /gms, /gmc, /gmspc, etc.
+    gamemodePermission: nncore.gamemode
+    
+    # What permission is needed for the /gamemode command on other players?
+    # This also is for /gms, /gmc, /gmspc, etc.
+    gamemodeOthersPermission: nncore.gamemode.other
+    
+    # What permission is needed for the /break command?
+    breakPermission: nncore.break
+    
+    # What permission is needed for the /godmode command?
+    godPermission: nncore.godmode
+    
+    # What permission is needed for the /godmode command on other players?
+    godOthersPermission: nncore.godmode.other
+    
+    # What permission is needed for the /fix command?
+    fixPermission: nncore.fix
+    
+    # What permission is needed for the /fix command on other players?
+    fixOthersPermission: nncore.fix.other
+    
+    # What permission is needed for the /fixall command?
+    fixAllPermission: nncore.fixall
+    
+    # What permission is needed for the /fixall command on other players?
+    fixAllOthersPermission: nncore.fixall.other
+    
+    # What permission is needed for the /give command?
+    givePermission: nncore.give
+    
+    # What permission is needed for the /item command?
+    itemPermission: nncore.item
+    
+    # -------------------> OTHERS SECTION <-------------------
+    
+    # Do you want to get notified about updates?
+    updateNotify: true
+    
+    # You DO NOT need to edit this section! If you do things could break!
+    nncoreVersion: 1.4
+
+# WARNING!
+#
+# Editing anything below this block may result
+# in the plugin BREAKING and becoming unusable!
+# If you do not realise what you are doing too
+# much, please do not alter the below code!
+# Thank you!
+
+# -------------------> EVENTS SECTION <-------------------
+
+on load:
+    # Skript Version Checker
+    set {_ver} to skript version
+    set {_ver} to first 3 characters of {_ver}
+    set {_ver} to "%{_ver}%" parsed as number
+    if {_ver} is less than 2.2:
+        set {nncore.status} to false
+    else:
+        set {nncore.status} to true
+    
+
+on join:
+    # Outdated skript warning
+    if {nncore.status} is false:
+        if player has permission "nncore.notify":
+            send "&cYour skript version is out of date!"
+            send "&cPlease update to version 2.2 or later!"
+            send "&cFor 1.8 servers, use 2.2-dev36"
+
+    {nncore.status} is true
+    
+    # Join Message Editor
+    if {@joinMessageEnabled} is true:
+        set join message to "{@joinMessage}"
+    else:
+        set join message to ""
+    
+    # Auto enable Night Vision
+    if {nightvision.status.%player%} is true:
+        wait 5 seconds
+        apply night vision tier 0 to player for 1 hour and ambient true
+        send "{@positivePrefix} {@commandReplyColour}Enabled NightVision for %player%"
+    
+    # NNCore Version Checker
+    if {@updateNotify} is true: 
+        if player has permission "nncore.notify":
+            set {_actual} to text from URL "https://pastebin.com/raw/TBXQ6XHz"
+            if "%{_actual}%" is not equal to "{@nncoreVersion}":
+                set {_n} to "%{_actual}%" parsed as number
+                set {_diff} to ({_n} - {@nncoreVersion}) * 10
+                wait 5.1 seconds
+                message ""
+                message "&8| &7There's a later version of NNCore available! (v%{_actual}%)"
+                message "&8| &7Download it here:&a https://bit.ly/latestnncore"
+                message "&8| &7You are currently %{_diff}% version(s) behind! (v{@nncoreVersion})"
+                message ""
+
+on quit:
+    {nncore.status} is true
+    if {@quitMessageEnabled} is true:
+        set quit message to "{@quitMessage}"
+    else:
+        set quit message to ""
+
+on death:
+    {nncore.status} is true
+    set death message to "{@deathMessage}"
+
+on damage:
+    {nncore.status} is true
+    if {godmode.status.%victim%} is true:
+        cancel event
+
+# -------------------> COMMANDS SECTION <-------------------
+
+command /fly [<boolean>] [<player>]:
+    permission: {@flyPermission}
+    permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
+    trigger:
+        if {nncore.status} is false:
+            send "&cThis command is disabled! Please download a later version of Skript!"
+            send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
+            stop
+        if arg 1 is set:
+            if arg 2 is set:
+                if arg 1 is true:
+                    send "{@positivePrefix} {@commandReplyColour}Enabled %arg 2%'s flight mode!"
+                    set player's flight mode to true
+                else:
+                    send "{@negativePrefix} {@commandReplyColour}Disabled %arg 2%'s flight mode!"
+                    set player's flight mode to false
+            else if arg 1 is true:
+                send "{@positivePrefix} {@commandReplyColour}Enabled %player%'s flight mode!"
+                set player's flight mode to true
+            else:
+                send "{@negativePrefix} {@commandReplyColour}Disabled %player%'s flight mode!"
+                set player's flight mode to false
+        else if flight state of player is true:
+            send "{@negativePrefix} {@commandReplyColour}Disabled %player%'s flight mode!"
+            set player's flight mode to false
+        else:
+            send "{@positivePrefix} {@commandReplyColour}Enabled %player%'s flight mode!"
+            set player's flight mode to true
+
+command /nightvision [<boolean>] [<player>]:
+    aliases: nv, nightv, nvision
+    permission: {@nvPermission}
+    permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
+    trigger:
+        if {nncore.status} is false:
+            send "&cThis command is disabled! Please download a later version of Skript!"
+            send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
+            stop
+        if arg 1 is set:
+            if arg 2 is set:
+                if player has permission "{@nvOthersPermission}":
+                    if arg 1 is true:
+                        send "{@positivePrefix} {@commandReplyColour}Enabled NightVision for %arg 2%"
+                        set {nightvision.status.%arg 2%} to true
+                        apply night vision tier 0 to arg 2 for 1 hour and ambient true
+                    else:
+                        send "{@negativePrefix} {@commandReplyColour}Disabled NightVision for %arg 2%"
+                        set {nightvision.status.%arg 2%} to false
+                        clear effects of arg 2
+                else:
+                    send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
+            else if arg 1 is true:
+                send "{@positivePrefix} {@commandReplyColour}Enabled NightVision for %player%"
+                set {nightvision.status.%arg 2%} to true
+                apply night vision tier 0 to player for 1 hour and ambient true
+            else:
+                send "{@negativePrefix} {@commandReplyColour}Disabled NightVision for %player%"
+                set {nightvision.status.%arg 2%} to false
+                clear effects of player
+        else if player has night vision:
+            send "{@negativePrefix} {@commandReplyColour}Disabled NightVision for %player%"
+            set {nightvision.status.%arg 2%} to false
+            clear effects of player
+        else:
+            send "{@positivePrefix} {@commandReplyColour}Enabled NightVision for %player%"
+            set {nightvision.status.%arg 2%} to true
+            apply night vision tier 0 to player for 1 hour and ambient true
+
+command /broadcast [<text>]:
+    permission: {@broadcastPermission}
+    permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
+    trigger:
+        if {nncore.status} is false:
+            send "&cThis command is disabled! Please download a later version of Skript!"
+            send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
+            stop
+        if arg 1 is set:
+            broadcast "{@broadcastPrefix}%arg 1%"
+        else:
+            send "{@positivePrefix} {@commandReplyColour}Please specify a message to broadcast."
+
+command /bc [<text>]:
+    trigger:
+        if arg 1 is set:
+            execute player command "/broadcast %arg 1%"
+        else:
+            execute player command "/broadcast"
+
+command /feed [<player>]:
+    permission: {@feedPermission}
+    permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
+    trigger:
+        if {nncore.status} is false:
+            send "&cThis command is disabled! Please download a later version of Skript!"
+            send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
+            stop
+        if arg 1 is set:
+            if player has permission "{@feedOthersPermission}":
+                send "{@positivePrefix} {@commandReplyColour}Sated %arg 1%'s appetite."
+                feed arg 1
+            else:
+                send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
+        else:
+            send "{@positivePrefix} {@commandReplyColour}Sated %player%'s appetite."
+            feed player
+
+command /heal [<player>]:
+    permission: {@healPermission}
+    permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
+    trigger:
+        if {nncore.status} is false:
+            send "&cThis command is disabled! Please download a later version of Skript!"
+            send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
+            stop
+        if arg 1 is set:
+            if player has permission "{@healOthersPermission}":
+                send "{@positivePrefix} {@commandReplyColour}Healed %arg 1%."
+                heal arg 1
+            else:
+                send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
+        else:
+            send "{@positivePrefix} {@commandReplyColour}Healed %player%."
+            heal player
+
+command /gamemode [<text>] [<player>]:
+    permission: {@gamemodePermission}
+    permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
+    trigger:
+        if {nncore.status} is false:
+            send "&cThis command is disabled! Please download a later version of Skript!"
+            send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
+            stop
+        if arg 1 is set:
+            if arg 1 is "survival", "s" or "0":
+                set {_gm} to survival
+            if arg 1 is "creative", "c" or "1":
+                set {_gm} to creative
+            if arg 1 is "adventure", "a" or "2":
+                set {_gm} to adventure
+            if arg 1 is "spectator", "spec", "spc", "sp" or "3":
+                set {_gm} to spectator
+            if arg 2 is set:
+                if player has permission "{@gamemodeOthersPermission}":
+                    send "{@positivePrefix} {@commandReplyColour}Set %arg 2%'s gamemode to %{_gm}%."
+                    set arg 2's gamemode to {_gm}
+                else:
+                    send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
+            else:
+                send "{@positivePrefix} {@commandReplyColour}Set %player%'s gamemode to %{_gm}%."
+                set player's gamemode to {_gm}
+        else:
+            send "{@negativePrefix} {@commandReplyColour}Please specify a gamemode!"
+
+command /gmc [<player>]:
+    permission: {@gamemodePermission}
+    permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
+    trigger:
+        if {nncore.status} is false:
+            send "&cThis command is disabled! Please download a later version of Skript!"
+            send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
+            stop
+        if arg 1 is set:
+            if player has permission "{@gamemodeOthersPermission}":
+                send "{@positivePrefix} {@commandReplyColour}Set %arg 1%'s gamemode to creative."
+                set arg 1's gamemode to creative
+            else:
+                send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
+        else:
+            send "{@positivePrefix} {@commandReplyColour}Set %player%'s gamemode to creative."
+            set player's gamemode to creative
+
+command /gms [<player>]:
+    permission: {@gamemodePermission}
+    permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
+    trigger:
+        if {nncore.status} is false:
+            send "&cThis command is disabled! Please download a later version of Skript!"
+            send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
+            stop
+        if arg 1 is set:
+            if player has permission "{@gamemodeOthersPermission}":
+                send "{@positivePrefix} {@commandReplyColour}Set %arg 1%'s gamemode to survival."
+                set arg 1's gamemode to survival
+            else:
+                send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
+        else:
+            send "{@positivePrefix} {@commandReplyColour}Set %player%'s gamemode to survival."
+            set player's gamemode to survival
+
+command /gmsp [<player>]:
+    permission: {@gamemodePermission}
+    permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
+    trigger:
+        if {nncore.status} is false:
+            send "&cThis command is disabled! Please download a later version of Skript!"
+            send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
+            stop
+        if arg 1 is set:
+            if player has permission "{@gamemodeOthersPermission}":
+                send "{@positivePrefix} {@commandReplyColour}Set %arg 1%'s gamemode to spectator."
+                set arg 1's gamemode to spectator
+            else:
+                send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
+        else:
+            send "{@positivePrefix} {@commandReplyColour}Set %player%'s gamemode to spectator."
+            set player's gamemode to spectator
+
+command /gma [<player>]:
+    permission: {@gamemodePermission}
+    permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
+    trigger:
+        if {nncore.status} is false:
+            send "&cThis command is disabled! Please download a later version of Skript!"
+            send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
+            stop
+        if arg 1 is set:
+            if player has permission "{@gamemodeOthersPermission}":
+                send "{@positivePrefix} {@commandReplyColour}Set %arg 1%'s gamemode to adventure."
+                set arg 1's gamemode to adventure
+            else:
+                send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
+        else:
+            send "{@positivePrefix} {@commandReplyColour}Set %player%'s gamemode to adventure."
+            set player's gamemode to adventure
+
+command /break:
+    permission: {@breakPermission}
+    permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
+    trigger:
+        if {nncore.status} is false:
+            send "&cThis command is disabled! Please download a later version of Skript!"
+            send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
+            stop
+        set target block to air
+
+command /god [<boolean>] [<player>]:
+    permission: {@godPermission}
+    permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
+    trigger:
+        if {nncore.status} is false:
+            send "&cThis command is disabled! Please download a later version of Skript!"
+            send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
+            stop
+        if arg 1 is set:
+            if arg 2 is set:
+                if player has permission "{@godOthersPermission}":
+                    if arg 1 is true:
+                        send "{@positivePrefix} {@commandReplyColour}Enabled godmode for %arg 2%"
+                        set {godmode.status.%arg 2%} to true
+                    else:
+                        send "{@negativePrefix} {@commandReplyColour}Disabled godmode for %arg 2%"
+                        set {godmode.status.%arg 2%} to false
+                else:
+                    send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
+            else if arg 1 is true:
+                send "{@positivePrefix} {@commandReplyColour}Enabled godmode for %player%"
+                set {godmode.status.%arg 2%} to true
+            else:
+                send "{@negativePrefix} {@commandReplyColour}Disabled godmode for %player%"
+                set {godmode.status.%arg 2%} to false
+        else if player has night vision:
+            send "{@negativePrefix} {@commandReplyColour}Disabled godmode for %player%"
+            set {godmode.status.%arg 2%} to false
+        else:
+            send "{@positivePrefix} {@commandReplyColour}Enabled godmode for %player%"
+            set {godmode.status.%arg 2%} to true
+
+command /fix [<player>]:
+    permission: {@fixPermission}
+    permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
+    trigger:
+        if {nncore.status} is false:
+            send "&cThis command is disabled! Please download a later version of Skript!"
+            send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
+            stop
+        if arg 1 is set:
+            if player has permission "{@fixOthersPermission}":
+                send "{@positivePrefix} {@commandReplyColour}Repaired %arg 1%'s tool."
+                repair arg 1's tool
+            else:
+                send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
+        else:
+            send "{@positivePrefix} {@commandReplyColour}Repaired %player%'s tool."
+            repair player's tool
+
+command /fixall [<player>]:
+    permission: {@fixAllPermission}
+    permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
+    trigger:
+        if {nncore.status} is false:
+            send "&cThis command is disabled! Please download a later version of Skript!"
+            send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
+            stop
+        if arg 1 is set:
+            if player has permission "{@fixAllOthersPermission}":
+                loop items in arg 1's inventory:
+                    repair loop-item
+                send "{@positivePrefix} {@commandReplyColour}Repaired all items in %arg 1%'s inventory."
+            else:
+                send "{@negativePrefix} {@commandReplyColour}{@noPermMessage}"
+        else:
+            loop items in player's inventory:
+                repair loop-item
+            send "{@positivePrefix} {@commandReplyColour}Repaired all items in %arg 1%'s inventory."
+
+command /give [<player>] [<item>] [<integer>]:
+    permission: {@givePermission}
+    permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
+    trigger:
+        if {nncore.status} is false:
+            send "&cThis command is disabled! Please download a later version of Skript!"
+            send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
+            stop
+        if arg 1 is set:
+            if arg 2 is set:
+                if arg 3 is set:
+                    set {_am} to arg 3
+                else:
+                    set {_am} to 64
+                add {_am} of arg 2 to arg 1's inventory
+                send "{@positivePrefix} {@commandReplyColour}Given %arg 1% %{_am}% of %arg 2%"
+            else:
+                send "{@negativePrefix} {@commandReplyColour}Please specify an item to give."
+        else:
+            send "{@negativePrefix} {@commandReplyColour}Please specify a player to give items to."
+
+command /item [<item>] [<integer>]:
+    permission: {@itemPermission}
+    permission message: {@noPermPrefix} {@noPermColour}{@noPermMessage}
+    trigger:
+        if {nncore.status} is false:
+            send "&cThis command is disabled! Please download a later version of Skript!"
+            send "&cHelp Link: &fhttps://discord.gg/Jqs6PFFY8Z"
+            stop
+        if arg 1 is set:
+            if arg 2 is set:
+                set {_am} to arg 2
+            else:
+                set {_am} to 64
+            add {_am} of arg 1 to player's inventory
+            send "{@positivePrefix} {@commandReplyColour}Spawned %{_am}% of %arg 2%"
+        else:
+            send "{@negativePrefix} {@commandReplyColour}Please specify an item to give."
+
+# -------------------> ALIASES SECTION <-------------------
+
+command /gm [<text>]:
+    trigger:
+        if arg 1 is set:
+            execute player command "/gamemode %arg 1%"
+        else:
+            execute player command "/gamemode"
+
+command /creative [<text>]:
+    trigger:
+        if arg 1 is set:
+            execute player command "/gmc %arg 1%"
+        else:
+            execute player command "/gmc"
+
+command /survival [<text>]:
+    trigger:
+        if arg 1 is set:
+            execute player command "/gms %arg 1%"
+        else:
+            execute player command "/gms"
+
+command /adventure [<text>]:
+    trigger:
+        if arg 1 is set:
+            execute player command "/gma %arg 1%"
+        else:
+            execute player command "/gma"
+
+command /gmspc [<text>]:
+    trigger:
+        if arg 1 is set:
+            execute player command "/gmsp %arg 1%"
+        else:
+            execute player command "/gmsp"
+
+command /spectator [<text>]:
+    trigger:
+        if arg 1 is set:
+            execute player command "/gmsp %arg 1%"
+        else:
+            execute player command "/gmsp"
+
+command /godmode [<text>]:
+    trigger:
+        if arg 1 is set:
+            execute player command "/god %arg 1%"
+        else:
+            execute player command "/god"
+
+command /repair [<text>]:
+    trigger:
+        if arg 1 is set:
+            execute player command "/fix %arg 1%"
+        else:
+            execute player command "/fix"
+
+command /i [<text>]:
+    trigger:
+        if arg 1 is set:
+            execute player command "/item %arg 1%"
+        else:
+            execute player command "/item"
