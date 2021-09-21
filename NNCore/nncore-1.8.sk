@@ -148,7 +148,21 @@ on load:
         set {nncore.status} to false
     else:
         set {nncore.status} to true
-    
+
+on script load:
+    if {@updateNotify} is true:
+        loop all players:
+            loop-player has permission "nncore.notify"
+            set {_actual} to text from URL "https://pastebin.com/raw/TBXQ6XHz"
+            if "%{_actual}%" != "{@nncoreVersion}":
+                set {_n} to "%{_actual}%" parsed as number
+                set {_diff} to ({_n} - {@nncoreVersion}) * 10
+                wait 5 ticks
+                send "&7" to loop-player
+                send "&8| &7There's a later version of NNCore available! (v%{_actual}%)" to loop-player
+                send "&8| &7Download it here:&a <link:https://bit.ly/latestnncore>https://bit.ly/latestnncore" to loop-player
+                send "&8| &7You are currently %{_diff}% version(s) behind! (v{@nncoreVersion})" to loop-player
+                send "&7" to loop-player
 
 on join:
     # Outdated skript warning
