@@ -127,7 +127,7 @@ options:
     updateNotify: true
     
     # You DO NOT need to edit this section! If you do things could break!
-    nncoreVersion: 1.4.1
+    nncoreVersion: 1.5
 
 # WARNING!
 #
