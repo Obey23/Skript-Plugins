@@ -153,7 +153,7 @@ on script load:
     if {@updateNotify} is true:
         loop all players:
             loop-player has permission "nncore.notify"
-            set {_actual} to text from URL "https://pastebin.com/raw/TBXQ6XHz"
+            set {_actual} to text from URL "https://pastebin.com/raw/nG46DzzV"
             if "%{_actual}%" != "{@nncoreVersion}":
                 set {_n} to "%{_actual}%" parsed as number
                 set {_diff} to ({_n} - {@nncoreVersion}) * 10
@@ -189,7 +189,7 @@ on join:
     # NNCore Version Checker
     if {@updateNotify} is true: 
         if player has permission "nncore.notify":
-            set {_actual} to text from URL "https://pastebin.com/raw/TBXQ6XHz"
+            set {_actual} to text from URL "https://pastebin.com/raw/nG46DzzV"
             if "%{_actual}%" is not equal to "{@nncoreVersion}":
                 set {_n} to "%{_actual}%" parsed as number
                 set {_diff} to ({_n} - {@nncoreVersion}) * 10
