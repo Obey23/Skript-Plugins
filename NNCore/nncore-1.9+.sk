@@ -9,15 +9,15 @@ options:
     
     # What do you want to positive prefix before command replies to be?
     # Default = &b&lNN&f&lCore &8|
-    positivePrefix: &a&l!
+    positivePrefix: &b&lNN&f&lCore &8|
     
     # What do you want to negative prefix before command replies to be?
     # Default = &b&lNN&f&lCore &8|
-    negativePrefix: &c&l!
+    negativePrefix: &b&lNN&f&lCore &8|
     
     # What do you want the permission denied prefix to be?
     # Default = §b§lNN§f§lCore §8|
-    noPermPrefix: &c&l!
+    noPermPrefix: &b&lNN&f&lCore &8|
     
     # What colour do you want the no permission message reply to be?
     # Default = §7
@@ -55,7 +55,7 @@ options:
     
     # What do you want the prefix to be for broadcasting messages?
     # Default = &f&lNN&c&lAlert &8| &7
-    broadcastPrefix: &c&lALERT &7
+    broadcastPrefix: &f&lNN&c&lAlert &8| &7
     
     # -------------------> PERMISSION SECTION <-------------------
     
